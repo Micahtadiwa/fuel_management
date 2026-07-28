@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./mvnw spring-boot:run *)",
+      "Bash(curl -s http://localhost:8080/api/fuel/records -H \"Authorization: Bearer test\")"
+    ]
+  }
+}
