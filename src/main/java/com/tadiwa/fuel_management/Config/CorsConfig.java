@@ -14,11 +14,12 @@ import java.util.List;
 public class CorsConfig {
 
     /**
-     * Comma-separated list of allowed origins, configurable via the
+     * Comma-separated list of allowed origin patterns, configurable via the
      * app.cors.allowed-origins property (env: APP_CORS_ALLOWED_ORIGINS).
-     * Defaults to local dev origins.
+     * Defaults to local dev origins plus the Vercel frontend (including
+     * preview deployments via the *.vercel.app wildcard).
      */
-    @Value("${app.cors.allowed-origins:http://localhost:4200,http://localhost:3000}")
+    @Value("${app.cors.allowed-origins:http://localhost:4200,http://localhost:3000,https://fuel-front-eight.vercel.app,https://*.vercel.app}")
     private String allowedOrigins;
 
     /**
@@ -32,7 +33,9 @@ public class CorsConfig {
                 .map(String::trim)
                 .filter(o -> !o.isEmpty())
                 .toList();
-        config.setAllowedOrigins(origins);
+        // setAllowedOriginPatterns (not setAllowedOrigins) so wildcard patterns
+        // like https://*.vercel.app work while still allowing credentials.
+        config.setAllowedOriginPatterns(origins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         // Expose the sliding-session refresh header so the browser can read it
