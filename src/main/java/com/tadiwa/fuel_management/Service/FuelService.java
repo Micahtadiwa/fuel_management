@@ -209,7 +209,7 @@ public class FuelService {
                   al_att.actioned_by_username           AS approvedByAttendant,
                   al_fin.actioned_by_username           AS signedByFinance
                 FROM fuel_records fr
-                LEFT JOIN user u ON fr.user_id = u.UserID
+                LEFT JOIN users u ON fr.user_id = u.UserID
                 LEFT JOIN vehicles v ON fr.vehicle_id = v.id
                 LEFT JOIN fuel_approval_log al_mgr
                        ON al_mgr.fuel_record_id = fr.id AND al_mgr.action = 'MANAGER_APPROVED'
@@ -511,7 +511,7 @@ public class FuelService {
                   ft.meter_reading AS meterReading,
                   ft.tank_level   AS tankLevel
                 FROM fuel_transactions ft
-                LEFT JOIN user u ON ft.created_by = u.UserID
+                LEFT JOIN users u ON ft.created_by = u.UserID
                 WHERE ft.source = 'REFILL'
                 ORDER BY ft.created_at DESC
                 """;

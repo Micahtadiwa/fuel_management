@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user")
+// "user" is a reserved word in PostgreSQL, so the table is named "users".
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UserID")
+    @Column(name = "userid")
     private Long userId;
 
     @Column(name = "username")
@@ -18,7 +19,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "Password")
+    @Column(name = "password")
     private String password;
 
     @Column(name = "role")
@@ -30,26 +31,17 @@ public class User {
     @Column(name = "pending_approval")
     private boolean pendingApproval = false;
 
-    // Backtick-quoted to prevent SpringPhysicalNamingStrategy from converting
-    // PascalCase → snake_case and creating duplicate columns in the DB
-    @Column(name = "`CreatedAt`")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "`UpdatedAt`")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "`IsActive`")
+    @Column(name = "is_active")
     private Boolean isActive = true;
 
-    @Column(name = "`TermsAccepted`")
+    @Column(name = "terms_accepted")
     private Boolean termsAccepted = false;
-
-    // Hibernate-generated snake_case duplicate — kept in sync via setters
-    @Column(name = "is_active", columnDefinition = "BIT(1)")
-    private Boolean isActiveFlag = false;
-
-    @Column(name = "terms_accepted", columnDefinition = "BIT(1)")
-    private Boolean termsAcceptedFlag = false;
 
     // Constructors
     public User() {}
@@ -77,22 +69,10 @@ public class User {
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
     public Boolean getIsActive() { return isActive; }
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-        this.isActiveFlag = isActive; // keep both columns in sync
-    }
+    public void setIsActive(Boolean isActive) { this.isActive = isActive; }
 
     public Boolean getTermsAccepted() { return termsAccepted; }
-    public void setTermsAccepted(Boolean termsAccepted) {
-        this.termsAccepted = termsAccepted;
-        this.termsAcceptedFlag = termsAccepted; // keep both columns in sync
-    }
-
-    public Boolean getIsActiveFlag() { return isActiveFlag; }
-    public void setIsActiveFlag(Boolean isActiveFlag) { this.isActiveFlag = isActiveFlag; }
-
-    public Boolean getTermsAcceptedFlag() { return termsAcceptedFlag; }
-    public void setTermsAcceptedFlag(Boolean termsAcceptedFlag) { this.termsAcceptedFlag = termsAcceptedFlag; }
+    public void setTermsAccepted(Boolean termsAccepted) { this.termsAccepted = termsAccepted; }
 
     public int getFailedLoginAttempts() { return failedLoginAttempts; }
     public void setFailedLoginAttempts(int failedLoginAttempts) { this.failedLoginAttempts = failedLoginAttempts; }
